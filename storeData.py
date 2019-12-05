@@ -11,3 +11,9 @@ df.to_pickle(hist_pkl_1h)
 
 df = yf.download(' '.join(tickers), '2015-01-01', '2019-12-01', group_by='ticker')
 df.to_pickle(hist_pkl)
+
+vix_tickers = ['^VIX', 'VXX', 'UVXY', 'SVXY']
+
+a = yf.Ticker('SVXY')
+print(a.history("max"))
+

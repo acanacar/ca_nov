@@ -65,3 +65,39 @@ def Tickers():
         'VAKBN.IS',
         'YKBNK.IS']
     return tickers
+
+
+# verilerin olceklenmesi
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+
+# 1. Logistic Regression
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC, LinearSVC, NuSVC
+from sklearn.naive_bayes import GaussianNB
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+
+logr = LogisticRegression(random_state=0)
+# 2. KNN
+knn = KNeighborsClassifier(n_neighbors=1, metric='minkowski')
+# 3. SVC (SVM classifier)
+svc_poly = SVC(kernel='poly')
+svc_linear = SVC(kernel='linear')
+svc_sigmoid = SVC(kernel='sigmoid')
+# 4. NAive Bayes
+gnb = GaussianNB()
+# 5. Decision tree
+dtc = DecisionTreeClassifier(criterion='entropy')
+# 6. Random Forest
+rfc = RandomForestClassifier(n_estimators=10, criterion='entropy')
+
+algDict = {'logr': logr,
+           'knn': knn,
+           'svc_poly': svc_poly,
+           'svc_linear': svc_linear,
+           'svc_sigmoid': svc_sigmoid,
+           'gnb': gnb,
+           'dtc': dtc,
+           'rfc': rfc}

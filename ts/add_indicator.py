@@ -1,7 +1,8 @@
 import talib
 
 
-def add_indicator(data):
+def add_indicator(data_frame):
+    data = data_frame.copy()
     open = data.Open
     high = data.High
     low = data.Low
