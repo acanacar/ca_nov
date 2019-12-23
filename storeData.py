@@ -17,3 +17,10 @@ vix_tickers = ['^VIX', 'VXX', 'UVXY', 'SVXY']
 a = yf.Ticker('SVXY')
 print(a.history("max"))
 
+df = pd.read_pickle(hist_pkl)
+dfx = df.iloc[:-1]
+dfx.to_hdf(hdf5_store,key='daily',mode='w',format='table')
+
+store = pd.HDFStore(hist_store)
+
+dfson= df.iloc[-1]

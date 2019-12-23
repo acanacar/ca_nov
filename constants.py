@@ -7,6 +7,8 @@ if getpass.getuser()=='a.acar':
         r'C:\Users\a.acar\PycharmProjects\VaR\sources\hist_data.h5')
     hist_pkl = str(
             r'C:\Users\a.acar\PycharmProjects\VaR\sources\hist_data.pkl')
+    hdf5_store = str(
+            r'C:\Users\a.acar\PycharmProjects\ca_nov\sources\hist_data.h5')
     hist_pkl_1m = str(
                 r'C:\Users\a.acar\PycharmProjects\VaR\sources\hist_data_1m.pkl')
 
