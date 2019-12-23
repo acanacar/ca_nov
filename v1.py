@@ -57,5 +57,12 @@ for algorithm in algorithms:
     y_pred = classifier.predict(x_test)
     df_classification.loc[-len(y_pred):, algorithm] = y_pred
 
+#
 df_regression = data.copy()
 df_regression['return'] = data['Adj Close'].pct_change()
+
+
+#
+
+
+
