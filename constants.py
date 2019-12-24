@@ -2,35 +2,37 @@ from pathlib import Path
 import pandas as pd
 
 import getpass
-if getpass.getuser()=='a.acar':
+
+if getpass.getuser() == 'a.acar':
     hist_store = str(
         r'C:\Users\a.acar\PycharmProjects\VaR\sources\hist_data.h5')
     hist_pkl = str(
-            r'C:\Users\a.acar\PycharmProjects\VaR\sources\hist_data.pkl')
+        r'C:\Users\a.acar\PycharmProjects\VaR\sources\hist_data.pkl')
     hdf5_store = str(
-            r'C:\Users\a.acar\PycharmProjects\ca_nov\sources\hist_data.h5')
+        r'C:\Users\a.acar\PycharmProjects\ca_nov\sources\hist_data.h5')
     hist_pkl_1m = str(
-                r'C:\Users\a.acar\PycharmProjects\VaR\sources\hist_data_1m.pkl')
+        r'C:\Users\a.acar\PycharmProjects\VaR\sources\hist_data_1m.pkl')
 
     hist_pkl_1h = str(r'C:\Users\a.acar\PycharmProjects\VaR\sources\hist_data_1h.pkl')
 
     VaR_png_output_path = str(r"C:\Users\a.acar\PycharmProjects\VaR\outputs")
 
-if getpass.getuser()=='root':
+if getpass.getuser() == 'root':
     project_path = Path('/home/acanacar/Desktop/projects/pycharm/VaR')
     data_path = Path('/home/acanacar/Desktop/data/')
 
     bar_path = str(data_path / 'bar/')
     tickall_path = str(data_path / 'tickall.pkl')
-
+    hdf5_store = str(
+        '/home/acanacar/PycharmProjects/ca_nov/sources/hist_data.h5')
     hist_store = str(
         '/home/acanacar/Desktop/projects/pycharm/VaR/sources/hist_data.h5')
     hist_pkl = str(
-            '/home/acanacar/Desktop/projects/pycharm/VaR/sources/hist_data.pkl')
+        '/home/acanacar/Desktop/projects/pycharm/VaR/sources/hist_data.pkl')
     hist_pkl_1m = str('/home/acanacar/Desktop/projects/pycharm/VaR/sources/hist_data_1m.pkl')
     hist_pkl_1h = str('/home/acanacar/Desktop/projects/pycharm/VaR/sources/hist_data_1h.pkl')
 
-    VaR_png_output_path = str(project_path/'outputs/')
+    VaR_png_output_path = str(project_path / 'outputs/')
 
 
 def Tickers():
