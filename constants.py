@@ -6,6 +6,8 @@ import getpass
 if getpass.getuser() == 'a.acar':
     hist_store = str(
         r'C:\Users\a.acar\PycharmProjects\VaR\sources\hist_data.h5')
+    tahvil_pkl = str(
+        r'C:\Users\a.acar\PycharmProjects\ca_nov\sources\tahvil2_5_10.pkl')
     hist_pkl = str(
         r'C:\Users\a.acar\PycharmProjects\VaR\sources\hist_data.pkl')
     hdf5_store = str(

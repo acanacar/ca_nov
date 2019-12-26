@@ -31,7 +31,7 @@ class tstable(object):
         self.return_series = self.dataframe['Adj Close'].pct_change().iloc[1:]
         self.indicator_df = self.dataframe.iloc[1:]
         self.classification_df = self.dataframe.iloc[1:]
-
+    
     def add_indicator(self):
         self.indicator_df = add_indicator(data_frame=self.indicator_df)
 
