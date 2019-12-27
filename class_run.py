@@ -1,8 +1,11 @@
 from ts_class import *
 
-d = tstable(stock='AKBNK.IS')
+d = tstable(stock='GARAN.IS')
 d.add_indicator()
 d.classify('knn')
+
+with pd.ExcelWriter(r'C:\Users\a.acar\PycharmProjects\ca_nov\outputs\ak.xlsx') as writer:
+    d.classification_df.to_excel(writer,sheet_name='GARAN')
 
 df = pd.read_pickle(hist_pkl)
 

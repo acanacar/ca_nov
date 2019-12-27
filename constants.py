@@ -99,6 +99,11 @@ dtc = DecisionTreeClassifier(criterion='entropy')
 # 6. Random Forest
 rfc = RandomForestClassifier(n_estimators=10, criterion='entropy')
 
+
+# REGRESYON
+from sklearn.linear_model import LinearRegression
+linear_reg = LinearRegression()
+
 algDict = {'logr': logr,
            'knn': knn,
            'svc_poly': svc_poly,

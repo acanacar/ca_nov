@@ -20,7 +20,9 @@ class tstable(object):
                'svc_sigmoid': svc_sigmoid,
                'gnb': gnb,
                'dtc': dtc,
-               'rfc': rfc}
+               'rfc': rfc,
+               'lin_reg': linear_reg
+               }
     data = pd.read_pickle(hist_pkl)
 
     def __init__(self, stock):
@@ -31,7 +33,8 @@ class tstable(object):
         self.return_series = self.dataframe['Adj Close'].pct_change().iloc[1:]
         self.indicator_df = self.dataframe.iloc[1:]
         self.classification_df = self.dataframe.iloc[1:]
-    
+        self.regression_df = self.dataframe.iloc[1:]
+
     def add_indicator(self):
         self.indicator_df = add_indicator(data_frame=self.indicator_df)
 
@@ -66,7 +69,7 @@ class tstable(object):
         self.x_train = sc.fit_transform(x_train)
         self.x_test = sc.transform(x_test)
 
-    def set_train_test_data(self):
+    def set_classification_train_test_data(self):
         X = self.classify_input
         Y = self.classification_df['label']
         x_train, x_test, self.y_train, self.y_test = train_test_split(X, Y,
@@ -74,22 +77,59 @@ class tstable(object):
         self.getScaledData(x_train, x_test)
 
     def set_classifier(self, algo='logr'):
-        self.classifier = algDict[algo]
+        self.classifier = tstable.algDict[algo]
 
     def fit_classifier(self):
         self.classifier.fit(self.x_train, self.y_train)
 
-    def make_predictions(self):
+    def make_predictions_classification(self):
         self.y_predictions = self.classifier.predict(self.x_test)
 
-    def set_predictions_to_dataframe(self, algo):
+    def set_predictions_to_dataframe_classification(self, algo):
         self.classification_df.loc[-len(self.y_predictions):, algo] = self.y_predictions
 
     def classify(self, algo, input_cols=['Open', 'High', 'Low', 'Close', 'Volume']):
         self.set_cols_to_classify(input_cols=input_cols)
         self.set_classification_label()
         self.set_classifier(algo=algo)
-        self.set_train_test_data()
+        self.set_classification_train_test_data()
         self.fit_classifier()
-        self.make_predictions()
-        self.set_predictions_to_dataframe(algo)
+        self.make_predictions_classification()
+        self.set_predictions_to_dataframe_classification(algo)
+
+    def to_excel(self):
+        pass
+
+    def set_cols_to_regress(self, input_cols):
+        self.regression_input_cols = input_cols
+        self.regression_input = self.regression_df.loc[:, self.regression_input_cols]
+
+    def set_dependent_variable(self):
+        self.regression_dependent_variable = self.regression_df['Close']
+
+    def set_regression_algo(self, algo):
+        self.regression_algo = tstable.algDict[algo]
+
+    def set_regression_train_test_data(self):
+        X = self.regression_input
+        Y = self.regression_dependent_variable
+        self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(X, Y,
+                                                                                test_size=0.3, random_state=0)
+
+    def fit_regression(self):
+        self.regression_algo.fit(self.x_train, self.y_train)
+
+    def make_predictions_regression(self):
+        self.y_predictions = self.regression_algo.predict(self.x_test)
+
+    def set_predictions_to_dataframe_regression(self, algo):
+        self.regression_df.loc[-len(self.y_predictions):, algo] = self.y_predictions
+
+    def regression(self, algo, input_cols=['Open', 'High', 'Low', 'Volume']):
+        self.set_cols_to_regress(input_cols=input_cols)
+        self.set_dependent_variable()
+        self.set_regression_algo(algo=algo)
+        self.set_regression_train_test_data()
+        self.fit_regression()
+        self.make_predictions_regression()
+        self.set_predictions_to_dataframe_regression(algo)
