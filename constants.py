@@ -102,13 +102,10 @@ rfc = RandomForestClassifier(n_estimators=10, criterion='entropy')
 
 # REGRESYON
 from sklearn.linear_model import LinearRegression
+from sklearn.svm import SVR
 linear_reg = LinearRegression()
+svr_rbf = SVR(kernel='rbf', C=100, gamma=0.1, epsilon=.1)
+svr_lin = SVR(kernel='linear', C=100, gamma='auto')
+svr_poly = SVR(kernel='poly', C=100, gamma='auto', degree=3, epsilon=.1,
+               coef0=1)
 
-algDict = {'logr': logr,
-           'knn': knn,
-           'svc_poly': svc_poly,
-           'svc_linear': svc_linear,
-           'svc_sigmoid': svc_sigmoid,
-           'gnb': gnb,
-           'dtc': dtc,
-           'rfc': rfc}

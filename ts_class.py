@@ -21,7 +21,10 @@ class tstable(object):
                'gnb': gnb,
                'dtc': dtc,
                'rfc': rfc,
-               'lin_reg': linear_reg
+               'lin_reg': linear_reg,
+               'svr_rbf_reg': svr_rbf,
+               'svr_lin_reg': svr_lin,
+               'svr_poly_reg': svr_poly,
                }
     data = pd.read_pickle(hist_pkl)
 
