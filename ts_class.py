@@ -101,7 +101,20 @@ class tstable(object):
         self.set_predictions_to_dataframe_classification(algo)
 
     def to_excel(self):
-        pass
+        from openpyxl import load_workbook
+
+        book_path = r'C:\Users\a.acar\PycharmProjects\ca_nov\outputs\book.xlsx'
+        book = load_workbook(book_path)
+
+        writer = pd.ExcelWriter(
+            path=book_path,
+            engine='openpyxl')
+
+        writer.book = book
+        df_excel = pd.concat([self.classification_df, self.regression_df, self.indicator_df], axis=1)
+        df_excel.to_excel(writer, sheet_name=self.stock)
+        writer.save()
+        writer.close()
 
     def set_cols_to_regress(self, input_cols):
         self.regression_input_cols = input_cols

@@ -1,12 +1,12 @@
 from ts_class import *
 
-d = tstable(stock='GARAN.IS')
+stock_name = 'GARAN.IS'
+
+d = tstable(stock=stock_name)
 d.add_indicator()
 d.classify('knn')
-
-with pd.ExcelWriter(r'C:\Users\a.acar\PycharmProjects\ca_nov\outputs\ak.xlsx') as writer:
-    d.classification_df.to_excel(writer,sheet_name='GARAN')
-
+d.regression('lin_reg')
+d.to_excel()
 df = pd.read_pickle(hist_pkl)
 
 tahvils = ['tahvil2y', 'tahvil5y', 'tahvil10y']
@@ -29,4 +29,3 @@ data = pd.concat(tahvil_dfs, axis=0)
 
 store = pd.HDFStore(hdf5_store)
 
-from sqlalchemy import create_engine
