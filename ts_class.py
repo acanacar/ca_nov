@@ -41,6 +41,50 @@ class tstable(object):
     def add_indicator(self):
         self.indicator_df = add_indicator(data_frame=self.indicator_df)
 
+    def calculate_correlation(self):
+
+        security_tickers = Security_Tickers()
+        vix_tickers = Vix_Tickers()
+        bond_tickers = Bonds_Tickers()
+
+        return_series = []
+
+        for i in security_tickers:
+            data = pd.read_pickle(hist_pkl)
+            data = data.loc[:, ([i], ['Adj Close'])]
+            return_series.append(data.pct_change().iloc[1:])
+
+        store = pd.HDFStore(hdf5_store)
+        for i in vix_tickers:
+            data = store['daily/vix']
+            data = data.loc[:, ([i], ['Adj Close'])]
+            return_series.append(data.pct_change().iloc[1:])
+        for i in bond_tickers:
+            data = store['daily/usbonds']
+            data = data.loc[:, ([i], ['Adj Close'])]
+            return_series.append(data.pct_change().iloc[1:])
+        if store.is_open:
+            store.close()
+
+        return_df = pd.concat(return_series, axis=1)
+        return_df.columns = return_df.columns.droplevel(1)
+        self.correlation_matrix = return_df.corr()
+
+    def correlation_to_excel(self):
+        from openpyxl import load_workbook
+
+        book_path = r'C:\Users\a.acar\PycharmProjects\ca_nov\outputs\book.xlsx'
+        book = load_workbook(book_path)
+
+        writer = pd.ExcelWriter(
+            path=book_path,
+            engine='openpyxl')
+
+        writer.book = book
+        self.correlation_matrix.to_excel(writer, sheet_name='Correlation')
+        writer.save()
+        writer.close()
+
     def set_classification_label(self):
 
         def conditions_series(r, yuzde_1=False):
@@ -99,6 +143,34 @@ class tstable(object):
         self.fit_classifier()
         self.make_predictions_classification()
         self.set_predictions_to_dataframe_classification(algo)
+
+    def external_datas_to_excel(self):
+        from openpyxl import load_workbook
+
+        store = pd.HDFStore(hdf5_store)
+        '''
+        /minute/tickers
+        /hour/tickers
+        /daily/df_
+        /daily/tahvils
+        /daily/tickers
+        /daily/usbonds
+        /daily/vix
+        /daily/vix_v2
+        '''
+        df_vix = pd.concat([store['daily/vix'], store['daily/vix_v2'], store['daily/usbonds']], axis=1)
+        store.close()
+        book_path = r'C:\Users\a.acar\PycharmProjects\ca_nov\outputs\book.xlsx'
+        book = load_workbook(book_path)
+
+        writer = pd.ExcelWriter(
+            path=book_path,
+            engine='openpyxl')
+        writer.book = book
+
+        df_vix.to_excel(writer, sheet_name="VIX and Bonds")
+        writer.save()
+        writer.close()
 
     def to_excel(self):
         from openpyxl import load_workbook

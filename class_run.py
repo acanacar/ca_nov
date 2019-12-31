@@ -7,6 +7,11 @@ d.add_indicator()
 d.classify('knn')
 d.regression('lin_reg')
 d.to_excel()
+
+d.calculate_correlation()
+d.correlation_to_excel()
+
+
 df = pd.read_pickle(hist_pkl)
 
 tahvils = ['tahvil2y', 'tahvil5y', 'tahvil10y']
@@ -28,4 +33,3 @@ for tahvil in tahvils:
 data = pd.concat(tahvil_dfs, axis=0)
 
 store = pd.HDFStore(hdf5_store)
-
