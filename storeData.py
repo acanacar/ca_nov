@@ -34,6 +34,9 @@ US_BONDS = ['^FVX', '^TNX']
 df_usbonds = yf.download(' '.join(US_BONDS), '2015-01-01', '2019-12-01', group_by='ticker')
 df_usbonds.to_hdf(hdf5_store, key='daily/usbonds', format='table')
 
+
+
+
 df_tahvils = pd.read_pickle(tahvil_pkl)
 df_tahvils.to_hdf(hdf5_store, key='daily/tahvils', format='table')
 
