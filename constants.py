@@ -37,7 +37,7 @@ if getpass.getuser() == 'root':
     VaR_png_output_path = str(project_path / 'outputs/')
 
 
-def Tickers():
+def Security_Tickers():
     tickers = [
         'EURUSD=X', 'EURTRY=X', 'TRY=X',
         'XU100.IS',
@@ -73,6 +73,23 @@ def Tickers():
     return tickers
 
 
+def Vix_Tickers():
+    Vix = ['VXX', 'UVXY', 'SVXY', 'BZ=F', 'GC=F', '^VIX']
+    return Vix
+
+def Bonds_Tickers():
+    Bonds = ['^FVX', '^TNX']
+    return Bonds
+
+def All_Tickers():
+    security_tickers = Tickers()
+    vix_tickers = Vix()
+    bond_tickers = Bonds()
+
+    return security_tickers + vix_tickers +bond_tickers
+
+
+
 # verilerin olceklenmesi
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
@@ -99,10 +116,10 @@ dtc = DecisionTreeClassifier(criterion='entropy')
 # 6. Random Forest
 rfc = RandomForestClassifier(n_estimators=10, criterion='entropy')
 
-
 # REGRESYON
 from sklearn.linear_model import LinearRegression
 from sklearn.svm import SVR
+
 linear_reg = LinearRegression()
 svr_rbf = SVR(kernel='rbf', C=100, gamma=0.1, epsilon=.1)
 svr_lin = SVR(kernel='linear', C=100, gamma='auto')
