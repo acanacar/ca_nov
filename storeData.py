@@ -2,7 +2,6 @@ import yfinance as yf
 from constants import *
 
 # Bist30 1min,60min and daily download and store
-tickers = Tickers()
 
 # df = yf.download(' '.join(tickers), '2019-12-02', '2019-12-03', group_by='ticker', interval='1m')
 # df.to_pickle(hist_pkl_1m)
@@ -34,11 +33,14 @@ US_BONDS = ['^FVX', '^TNX']
 df_usbonds = yf.download(' '.join(US_BONDS), '2015-01-01', '2019-12-01', group_by='ticker')
 df_usbonds.to_hdf(hdf5_store, key='daily/usbonds', format='table')
 
-
-
-
 df_tahvils = pd.read_pickle(tahvil_pkl)
 df_tahvils.to_hdf(hdf5_store, key='daily/tahvils', format='table')
+
+def get_vix():
+    vix_tickers = ['VXX', 'UVXY', 'SVXY']
+    df_vix = yf.download(' '.join(vix_tickers), '2015-01-01', '2019-12-01', group_by='ticker')
+def get_datas_yahoo():
+    get_vix()
 
 df_ = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]}, index=['a', 'b', 'c'])
 df_.to_hdf(hdf5_store, key='daily/df_', format='table')
