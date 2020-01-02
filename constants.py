@@ -77,17 +77,15 @@ def Vix_Tickers():
     Vix = ['VXX', 'UVXY', 'SVXY', 'BZ=F', 'GC=F', '^VIX']
     return Vix
 
+
 def Bonds_Tickers():
     Bonds = ['^FVX', '^TNX']
     return Bonds
 
-def All_Tickers():
-    security_tickers = Tickers()
-    vix_tickers = Vix()
-    bond_tickers = Bonds()
 
-    return security_tickers + vix_tickers +bond_tickers
-
+def Tr_Tahvil_Tickers():
+    Tahvil_Tr = ['tahvil2y', 'tahvil5y', 'tahvil10y']
+    return Tahvil_Tr
 
 
 # verilerin olceklenmesi
@@ -122,6 +120,5 @@ from sklearn.svm import SVR
 
 linear_reg = LinearRegression()
 svr_rbf = SVR(kernel='rbf', C=100, gamma=0.1, epsilon=.1)
-svr_lin = SVR(kernel='linear', C=100, gamma='auto')
 svr_poly = SVR(kernel='poly', C=100, gamma='auto', degree=3, epsilon=.1,
                coef0=1)

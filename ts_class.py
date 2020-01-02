@@ -5,13 +5,6 @@ import requests
 import io
 
 
-# res = requests.get('http://sentdex.com/api/finance/sentiment-signals/sample/')
-# if res.status_code is 200:
-#     response = res.content
-#     # lines = response.splitlines()
-#     sentiment_dataframe = pd.read_csv(io.StringIO(response.decode('utf-8')))
-#     sentiment_dataframe['date'] = pd.to_datetime(sentiment_dataframe['date'])
-
 class tstable(object):
     algDict = {'logr': logr,
                'knn': knn,
@@ -23,7 +16,6 @@ class tstable(object):
                'rfc': rfc,
                'lin_reg': linear_reg,
                'svr_rbf_reg': svr_rbf,
-               'svr_lin_reg': svr_lin,
                'svr_poly_reg': svr_poly,
                }
     data = pd.read_pickle(hist_pkl)
@@ -38,6 +30,15 @@ class tstable(object):
         self.classification_df = self.dataframe.iloc[1:]
         self.regression_df = self.dataframe.iloc[1:]
 
+    def get_sentiment_df(self):
+        res = requests.get('http://sentdex.com/api/finance/sentiment-signals/sample/')
+        if res.status_code is 200:
+            response = res.content
+            # lines = response.splitlines()
+            sentiment_dataframe = pd.read_csv(io.StringIO(response.decode('utf-8')))
+            sentiment_dataframe['date'] = pd.to_datetime(sentiment_dataframe['date'])
+            self.sentiment_df = sentiment_dataframe
+
     def add_indicator(self):
         self.indicator_df = add_indicator(data_frame=self.indicator_df)
 
@@ -46,7 +47,7 @@ class tstable(object):
         security_tickers = Security_Tickers()
         vix_tickers = Vix_Tickers()
         bond_tickers = Bonds_Tickers()
-
+        tr_tahvil_tickers = Tr_Tahvil_Tickers()
         return_series = []
 
         for i in security_tickers:
@@ -63,11 +64,18 @@ class tstable(object):
             data = store['daily/usbonds']
             data = data.loc[:, ([i], ['Adj Close'])]
             return_series.append(data.pct_change().iloc[1:])
+        return_df = pd.concat(return_series, axis=1)
+        return_df.columns = return_df.columns.droplevel(1)
+
+        for i in tr_tahvil_tickers:
+            data = store['daily/tahvils']
+            data = data.loc[data.stock == i, 'Close']
+            return_df[i] = data
+
         if store.is_open:
             store.close()
 
-        return_df = pd.concat(return_series, axis=1)
-        return_df.columns = return_df.columns.droplevel(1)
+
         self.correlation_matrix = return_df.corr()
 
     def correlation_to_excel(self):
@@ -143,7 +151,12 @@ class tstable(object):
         self.fit_classifier()
         self.make_predictions_classification()
         self.set_predictions_to_dataframe_classification(algo)
-
+    def check_sheetname_existence(self,book,sheetname):
+        if sheetname in book.sheetnames:
+            sheet_for_remove = book.get_sheet_by_name(sheetname)
+            book.remove_sheet(sheet_for_remove)
+        else:
+            pass
     def external_datas_to_excel(self):
         from openpyxl import load_workbook
 
@@ -159,6 +172,8 @@ class tstable(object):
         /daily/vix_v2
         '''
         df_vix = pd.concat([store['daily/vix'], store['daily/vix_v2'], store['daily/usbonds']], axis=1)
+        df_tr_tahvil = store['daily/tahvils']
+
         store.close()
         book_path = r'C:\Users\a.acar\PycharmProjects\ca_nov\outputs\book.xlsx'
         book = load_workbook(book_path)
@@ -168,7 +183,13 @@ class tstable(object):
             engine='openpyxl')
         writer.book = book
 
+        self.check_sheetname_existence(book=book, sheetname="VIX and Bonds")
         df_vix.to_excel(writer, sheet_name="VIX and Bonds")
+        for i in df_tr_tahvil.stock.unique():
+            data = df_tr_tahvil.loc[df_tr_tahvil.stock == i, :]
+            self.check_sheetname_existence(book=book, sheetname=i)
+
+            data.to_excel(writer, sheet_name=i)
         writer.save()
         writer.close()
 
@@ -184,6 +205,9 @@ class tstable(object):
 
         writer.book = book
         df_excel = pd.concat([self.classification_df, self.regression_df, self.indicator_df], axis=1)
+        df_excel = df_excel.loc[:, ~df_excel.columns.duplicated()]
+        self.check_sheetname_existence(book=book,sheetname=self.stock)
+
         df_excel.to_excel(writer, sheet_name=self.stock)
         writer.save()
         writer.close()
