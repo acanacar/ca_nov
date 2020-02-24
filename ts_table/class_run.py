@@ -1,5 +1,4 @@
-from ts_class import *
-
+from ts_table.ts_class import *
 
 stock_name = 'GARAN.IS'
 
@@ -32,25 +31,24 @@ d.correlation_to_excel()
 d.get_sentiment_df()
 print(d.sentiment_df.head())
 
-
-stock_names = ['GARAN.IS','XU100.IS','EKGYO.IS',
-        'EREGL.IS','EURUSD=X', 'EURTRY=X']
+stock_names = ['GARAN.IS', 'XU100.IS', 'EKGYO.IS',
+               'EREGL.IS', 'EURUSD=X', 'EURTRY=X']
 # toplu stocklar icin ayni anda yaparken;
 for stock_name in stock_names:
-        d = tstable(stock=stock_name)
+    d = tstable(stock=stock_name)
 
-        # secilen stoga ait indicatorler dataframe e yeni kolon olarak eklenir.
-        d.add_indicator()
+    # secilen stoga ait indicatorler dataframe e yeni kolon olarak eklenir.
+    d.add_indicator()
 
-        # secilen stoga ait secilen classification algoritmasi calistirilir ve self.classification_df olarak objeye kaydedilir.
-        d.classify('knn')
-        d.classify('svc_poly')
-        d.classify('logr')
+    # secilen stoga ait secilen classification algoritmasi calistirilir ve self.classification_df olarak objeye kaydedilir.
+    d.classify('knn')
+    d.classify('svc_poly')
+    d.classify('logr')
 
-        # secilen stoga ait secilen regresyon algoritmasi calistirilir ve self.regression_df olarak objeye kaydedilir.
-        d.regression('lin_reg')
+    # secilen stoga ait secilen regresyon algoritmasi calistirilir ve self.regression_df olarak objeye kaydedilir.
+    d.regression('lin_reg')
 
-        # bu komut ile indicatorleri iceren dataframe, regression sonuclarini iceren dataframe ve
-        # classification sonuclarini iceren dataframe excele farkli bir sheete (sheetname = stock adi olur) kaydedilir.
-        d.to_excel()
-        print(stock_name)
+    # bu komut ile indicatorleri iceren dataframe, regression sonuclarini iceren dataframe ve
+    # classification sonuclarini iceren dataframe excele farkli bir sheete (sheetname = stock adi olur) kaydedilir.
+    d.to_excel()
+    print(stock_name)

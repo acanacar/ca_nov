@@ -1,5 +1,5 @@
-from constants import *
-from ts.add_indicator import *
+from ts_table.variables import *
+from trash.ts.add_indicator import *
 
 import requests
 import io
@@ -81,7 +81,7 @@ class tstable(object):
     def correlation_to_excel(self):
         from openpyxl import load_workbook
 
-        book_path = r'C:\Users\a.acar\PycharmProjects\ca_nov\outputs\book.xlsx'
+        book_path = r'C:\Users\a.acar\Desktop\PycharmProjects\ca_nov\outputs\book.xlsx'
         book = load_workbook(book_path)
 
         writer = pd.ExcelWriter(
@@ -110,10 +110,11 @@ class tstable(object):
                     return -1
                 else:
                     return 0
-
-        self.classification_df.loc[:, 'label'] = self.return_series.apply(conditions_series, yuzde_1=False)
-        self.classification_df.loc[:, 'label_1_pct'] = self.return_series.apply(conditions_series,
+        classf_df = self.classification_df.copy()
+        classf_df.loc[:, 'label'] = self.return_series.apply(conditions_series, yuzde_1=False)
+        classf_df.loc[:, 'label_1_pct'] = self.return_series.apply(conditions_series,
                                                                                 yuzde_1=True)
+        self.classification_df = classf_df
 
     def set_cols_to_classify(self, input_cols):
         self.classifying_input_cols = input_cols
@@ -175,7 +176,7 @@ class tstable(object):
         df_tr_tahvil = store['daily/tahvils']
 
         store.close()
-        book_path = r'C:\Users\a.acar\PycharmProjects\ca_nov\outputs\book.xlsx'
+        book_path = r'C:\Users\a.acar\Desktop\PycharmProjects\ca_nov\outputs\book.xlsx'
         book = load_workbook(book_path)
 
         writer = pd.ExcelWriter(
@@ -196,7 +197,7 @@ class tstable(object):
     def to_excel(self):
         from openpyxl import load_workbook
 
-        book_path = r'C:\Users\a.acar\PycharmProjects\ca_nov\outputs\book.xlsx'
+        book_path = r'C:\Users\a.acar\Desktop\PycharmProjects\ca_nov\outputs\c1.xlsx'
         book = load_workbook(book_path)
 
         writer = pd.ExcelWriter(
@@ -235,7 +236,9 @@ class tstable(object):
         self.y_predictions = self.regression_algo.predict(self.x_test)
 
     def set_predictions_to_dataframe_regression(self, algo):
-        self.regression_df.loc[-len(self.y_predictions):, algo] = self.y_predictions
+        regression_df = self.regression_df.copy()
+        regression_df.loc[-len(self.y_predictions):, algo] = self.y_predictions
+        self.regression_df = regression_df
 
     def regression(self, algo, input_cols=['Open', 'High', 'Low', 'Volume']):
         self.set_cols_to_regress(input_cols=input_cols)

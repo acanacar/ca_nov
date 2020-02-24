@@ -1,5 +1,5 @@
 import yfinance as yf
-from constants import *
+from ts_table.variables import *
 
 # Bist30 1min,60min and daily download and store
 

@@ -1,7 +1,7 @@
 # korelasyon sutunu icin
 
 
-from constants import *
+from ts_table.variables import *
 import pandas as pd
 
 data = pd.read_pickle(hist_pkl)

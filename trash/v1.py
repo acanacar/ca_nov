@@ -1,7 +1,7 @@
-from constants import *
+from ts_table.variables import *
 import pandas as pd
-from ts.add_indicator import *
-from ts.classification import getScaledData
+from trash.ts.add_indicator import *
+from trash.ts.classification import getScaledData
 
 data = pd.read_pickle(hist_pkl)
 
